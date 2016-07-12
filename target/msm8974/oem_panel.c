@@ -1,4 +1,5 @@
 /* Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2016 sndnvaps<sndnvaps@gmail.com> All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -43,11 +44,13 @@
 /* GCDB Panel Database                                                       */
 /*---------------------------------------------------------------------------*/
 #include "include/panel_toshiba_720p_video.h"
+#include "include/panel_sharp_fhd_cmd.h"
 #include "include/panel_sharp_qhd_video.h"
 #include "include/panel_jdi_1080p_video.h"
 #include "include/panel_generic_720p_cmd.h"
 #include "include/panel_jdi_qhd_dualdsi_video.h"
 #include "include/panel_jdi_qhd_dualdsi_cmd.h"
+
 
 #define DISPLAY_MAX_PANEL_DETECTION 3
 
@@ -61,6 +64,7 @@ SHARP_QHD_VIDEO_PANEL,
 GENERIC_720P_CMD_PANEL,
 JDI_QHD_DUALDSI_VIDEO_PANEL,
 JDI_QHD_DUALDSI_CMD_PANEL,
+SHARP_FHD_VIDEO_PANEL,
 UNKNOWN_PANEL
 };
 
@@ -72,6 +76,7 @@ static struct panel_list supp_panels[] = {
 	{"jdi_1080p_video", JDI_1080P_VIDEO_PANEL},
 	{"toshiba_720p_video", TOSHIBA_720P_VIDEO_PANEL},
 	{"sharp_qhd_video", SHARP_QHD_VIDEO_PANEL},
+	{"sharp_fhd_video", SHARP_FHD_VIDEO_PANEL},
 	{"generic_720p_cmd", GENERIC_720P_CMD_PANEL},
 	{"jdi_qhd_dualdsi_video", JDI_QHD_DUALDSI_VIDEO_PANEL},
 	{"jdi_qhd_dualdsi_cmd", JDI_QHD_DUALDSI_CMD_PANEL},
@@ -106,7 +111,7 @@ static int init_panel_data(struct panel_struct *panelstruct,
 			struct mdss_dsi_phy_ctrl *phy_db)
 {
 	int pan_type = PANEL_TYPE_DSI;
-
+#ifndef DISPLAY_XIAOMI_CANCRO
 	switch (panel_id) {
 	case TOSHIBA_720P_VIDEO_PANEL:
 		panelstruct->paneldata    = &toshiba_720p_video_panel_data;
@@ -132,6 +137,30 @@ static int init_panel_data(struct panel_struct *panelstruct,
 		memcpy(phy_db->timing,
 			toshiba_720p_video_timings, TIMING_SIZE);
 		pinfo->mipi.signature 	= TOSHIBA_720P_VIDEO_SIGNATURE;
+		break;
+	case SHARP_FHD_VIDEO_PANEL:
+		panelstruct->paneldata    = &sharp_fhd_cmd_panel_data;
+		panelstruct->panelres     = &sharp_fhd_cmd_panel_res;
+		panelstruct->color        = &sharp_fhd_cmd_color;
+		panelstruct->videopanel   = &sharp_fhd_cmd_video_panel;
+		panelstruct->commandpanel = &sharp_fhd_cmd_command_panel;
+		panelstruct->state        = &sharp_fhd_cmd_state;
+		panelstruct->laneconfig   = &sharp_fhd_cmd_lane_config;
+		panelstruct->paneltiminginfo
+					 = &sharp_fhd_cmd_timing_info;
+		panelstruct->panelresetseq
+					 = &sharp_fhd_cmd_panel_reset_seq;
+		panelstruct->backlightinfo = &sharp_fhd_cmd_backlight;
+		pinfo->mipi.panel_on_cmds
+					= sharp_fhd_cmd_on_command;
+		pinfo->mipi.num_of_panel_on_cmds
+					= SHARP_FHD_CMD_ON_COMMAND;
+		pinfo->mipi.panel_off_cmds
+					= sharp_fhd_cmd_off_command;
+		pinfo->mipi.num_of_panel_off_cmds
+					= SHARP_FHD_CMD_OFF_COMMAND;
+		memcpy(phy_db->timing,
+				sharp_fhd_cmd_timings, TIMING_SIZE);
 		break;
 	case SHARP_QHD_VIDEO_PANEL:
 		panelstruct->paneldata    = &sharp_qhd_video_panel_data;
@@ -269,7 +298,32 @@ static int init_panel_data(struct panel_struct *panelstruct,
 		break;
 	}
 
-	return pan_type;
+
+#else
+		panelstruct->paneldata    = &sharp_fhd_cmd_panel_data;
+		panelstruct->panelres     = &sharp_fhd_cmd_panel_res;
+		panelstruct->color        = &sharp_fhd_cmd_color;
+		panelstruct->videopanel   = &sharp_fhd_cmd_video_panel;
+		panelstruct->commandpanel = &sharp_fhd_cmd_command_panel;
+		panelstruct->state        = &sharp_fhd_cmd_state;
+		panelstruct->laneconfig   = &sharp_fhd_cmd_lane_config;
+		panelstruct->paneltiminginfo
+					 = &sharp_fhd_cmd_timing_info;
+		panelstruct->panelresetseq
+					 = &sharp_fhd_cmd_panel_reset_seq;
+		panelstruct->backlightinfo = &sharp_fhd_cmd_backlight;
+		pinfo->mipi.panel_on_cmds
+					= sharp_fhd_cmd_on_command;
+		pinfo->mipi.num_of_panel_on_cmds
+					= SHARP_FHD_CMD_ON_COMMAND;
+		pinfo->mipi.panel_off_cmds
+					= sharp_fhd_cmd_off_command;
+		pinfo->mipi.num_of_panel_off_cmds
+					= SHARP_FHD_CMD_OFF_COMMAND;
+		memcpy(phy_db->timing,
+				sharp_fhd_cmd_timings, TIMING_SIZE);
+#endif
+		return pan_type;
 }
 
 uint32_t oem_panel_max_auto_detect_panels()
@@ -318,6 +372,8 @@ int oem_panel_select(const char *panel_name, struct panel_struct *panelstruct,
 		case 2:
 			panel_id = GENERIC_720P_CMD_PANEL;
 			break;
+		case 3:
+			panel_id = SHARP_FHD_VIDEO_PANEL;
 		default:
 			panel_id = UNKNOWN_PANEL;
 			break;

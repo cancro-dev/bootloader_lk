@@ -3780,7 +3780,7 @@ void aboot_init(const struct app_descriptor *app)
 	unsigned reboot_mode = 0;
 	unsigned hard_reboot_mode = 0;
 	bool boot_into_fastboot = false;
-
+	dprintf(INFO, "Aboot init %s in %d\n", __func__,__LINE__);
 	/* Setup page size information for nv storage */
 	if (target_is_emmc_boot())
 	{
@@ -3798,14 +3798,16 @@ void aboot_init(const struct app_descriptor *app)
 	read_device_info(&device);
 	read_allow_oem_unlock(&device);
 
+	dprintf(INFO, "Aboot init %s in %d\n", __func__,__LINE__);
+
 	/* Display splash screen if enabled */
 #if DISPLAY_SPLASH_SCREEN
 #if NO_ALARM_DISPLAY
 	if (!check_alarm_boot()) {
 #endif
-		dprintf(SPEW, "Display Init: Start\n");
+		dprintf(INFO, "Display Init: Start\n");
 		target_display_init(device.display_panel);
-		dprintf(SPEW, "Display Init: Done\n");
+		dprintf(INFO, "Display Init: Done\n");
 #if NO_ALARM_DISPLAY
 	}
 #endif

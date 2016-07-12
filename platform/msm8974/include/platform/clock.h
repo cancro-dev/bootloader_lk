@@ -116,5 +116,9 @@ void edp_clk_enable(void);
 void clock_ce_enable(uint8_t instance);
 void clock_ce_disable(uint8_t instance);
 void clock_usb30_init(void);
-
+void mmss_clock_auto_pll_init(uint32_t dsi_pixel0_cfg_rcgr, uint32_t dual_dsi,
+			uint8_t pclk0_m, uint8_t pclk0_n, uint8_t pclk0_d);
+void mmss_clock_disable(uint32_t dual_dsi);
+void edp_clk_enable(void);
+void edp_clk_disable(void);
 #endif
