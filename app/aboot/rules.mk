@@ -5,9 +5,6 @@ INCLUDES += -I$(LK_TOP_DIR)/lib/zlib_inflate
 DEFINES += ASSERT_ON_TAMPER=1
 
 MODULES += lib/zlib_inflate
-MODULES += lib/bio
-MODULES += lib/partition
-MODULES += lib/base64
 
 OBJS += \
 	$(LOCAL_DIR)/aboot.o \
