@@ -33,6 +33,7 @@
 #include <smem.h>
 #include <msm_panel.h>
 #include <board.h>
+#include <platform/gpio.h>
 #include <mipi_dsi.h>
 #include <string.h>
 #include <target/display.h>
@@ -53,19 +54,20 @@
 
 
 #define DISPLAY_MAX_PANEL_DETECTION 3
+extern void mdelay(unsigned msecs);
 
 /*---------------------------------------------------------------------------*/
 /* static panel selection variable                                           */
 /*---------------------------------------------------------------------------*/
 enum {
-JDI_1080P_VIDEO_PANEL,
-TOSHIBA_720P_VIDEO_PANEL,
-SHARP_QHD_VIDEO_PANEL,
-GENERIC_720P_CMD_PANEL,
-JDI_QHD_DUALDSI_VIDEO_PANEL,
-JDI_QHD_DUALDSI_CMD_PANEL,
-SHARP_FHD_VIDEO_PANEL,
-UNKNOWN_PANEL
+	JDI_1080P_VIDEO_PANEL,
+	TOSHIBA_720P_VIDEO_PANEL,
+	SHARP_QHD_VIDEO_PANEL,
+	GENERIC_720P_CMD_PANEL,
+	JDI_QHD_DUALDSI_VIDEO_PANEL,
+	JDI_QHD_DUALDSI_CMD_PANEL,
+	SHARP_FHD_VIDEO_PANEL,
+	UNKNOWN_PANEL
 };
 
 /*
@@ -111,7 +113,7 @@ static int init_panel_data(struct panel_struct *panelstruct,
 			struct mdss_dsi_phy_ctrl *phy_db)
 {
 	int pan_type = PANEL_TYPE_DSI;
-#ifndef DISPLAY_XIAOMI_CANCRO
+	dprintf(INFO, "panel_id = %d\n",panel_id);
 	switch (panel_id) {
 	case TOSHIBA_720P_VIDEO_PANEL:
 		panelstruct->paneldata    = &toshiba_720p_video_panel_data;
@@ -298,31 +300,6 @@ static int init_panel_data(struct panel_struct *panelstruct,
 		break;
 	}
 
-
-#else
-		panelstruct->paneldata    = &sharp_fhd_cmd_panel_data;
-		panelstruct->panelres     = &sharp_fhd_cmd_panel_res;
-		panelstruct->color        = &sharp_fhd_cmd_color;
-		panelstruct->videopanel   = &sharp_fhd_cmd_video_panel;
-		panelstruct->commandpanel = &sharp_fhd_cmd_command_panel;
-		panelstruct->state        = &sharp_fhd_cmd_state;
-		panelstruct->laneconfig   = &sharp_fhd_cmd_lane_config;
-		panelstruct->paneltiminginfo
-					 = &sharp_fhd_cmd_timing_info;
-		panelstruct->panelresetseq
-					 = &sharp_fhd_cmd_panel_reset_seq;
-		panelstruct->backlightinfo = &sharp_fhd_cmd_backlight;
-		pinfo->mipi.panel_on_cmds
-					= sharp_fhd_cmd_on_command;
-		pinfo->mipi.num_of_panel_on_cmds
-					= SHARP_FHD_CMD_ON_COMMAND;
-		pinfo->mipi.panel_off_cmds
-					= sharp_fhd_cmd_off_command;
-		pinfo->mipi.num_of_panel_off_cmds
-					= SHARP_FHD_CMD_OFF_COMMAND;
-		memcpy(phy_db->timing,
-				sharp_fhd_cmd_timings, TIMING_SIZE);
-#endif
 		return pan_type;
 }
 
@@ -331,6 +308,15 @@ uint32_t oem_panel_max_auto_detect_panels()
 	return target_panel_auto_detect_enabled() ?
 			DISPLAY_MAX_PANEL_DETECTION : 0;
 }
+
+static int is_sharp_fhd_panel(void)
+{
+	gpio_tlmm_config(58, 0, 0, 0, 3u, 0);
+	gpio_set(58, 0);
+	mdelay(3);
+	return gpio_status(58);
+}
+
 
 static uint32_t auto_pan_loop = 0;
 
@@ -372,13 +358,13 @@ int oem_panel_select(const char *panel_name, struct panel_struct *panelstruct,
 		case 2:
 			panel_id = GENERIC_720P_CMD_PANEL;
 			break;
-		case 3:
-			panel_id = SHARP_FHD_VIDEO_PANEL;
 		default:
 			panel_id = UNKNOWN_PANEL;
 			break;
 		}
 		auto_pan_loop++;
+		if (is_sharp_fhd_panel())
+				panel_id = SHARP_FHD_VIDEO_PANEL;
 		break;
 	case HW_PLATFORM_DRAGON:
 		panel_id = SHARP_QHD_VIDEO_PANEL;

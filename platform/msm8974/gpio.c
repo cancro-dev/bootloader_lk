@@ -46,6 +46,12 @@ void gpio_tlmm_config(uint32_t gpio, uint8_t func,
 	return;
 }
 
+
+uint32_t gpio_status(uint32_t gpio)
+{
+	return readl(GPIO_IN_OUT_ADDR(gpio)) & GPIO_IN;
+}
+
 void gpio_set(uint32_t gpio, uint32_t dir)
 {
 	writel(dir, (unsigned int *)GPIO_IN_OUT_ADDR(gpio));

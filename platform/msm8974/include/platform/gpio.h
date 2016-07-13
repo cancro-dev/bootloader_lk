@@ -29,6 +29,7 @@
 #ifndef __PLATFORM_COPPER_GPIO_H
 #define __PLATFORM_COPPER_GPIO_H
 
+#include <bits.h>
 #include <gpio.h>
 
 /* GPIO TLMM: Direction */
@@ -55,6 +56,10 @@
 #define GPIO_ENABLE     0
 #define GPIO_DISABLE    1
 
+/* GPIO_IN_OUT register shifts. */
+#define GPIO_IN         BIT(0)
+#define GPIO_OUT        BIT(1)
+
 void gpio_config_uart_dm(uint8_t id);
 void gpio_config_blsp_i2c(uint8_t, uint8_t);
 
@@ -62,5 +67,6 @@ void gpio_tlmm_config(uint32_t gpio, uint8_t func,
 		      uint8_t dir, uint8_t pull,
 		      uint8_t drvstr, uint32_t enable);
 void gpio_set(uint32_t gpio, uint32_t dir);
+uint32_t gpio_status(uint32_t gpio);
 
 #endif
