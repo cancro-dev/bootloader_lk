@@ -432,10 +432,10 @@ void fastboot_okay(const char *info)
 	fastboot_ack("OKAY", info);
 }
 
-void fastboot_send_string(void* _data, size_t size) {
+void fastboot_send_string(const void* _data, size_t size) {
 	uint32_t i;
 	char buf[MAX_RSP_SIZE];
-	uint8_t* data = _data;
+	const uint8_t* data = _data;
 
 	for(i=0; i<size; i+=MAX_RSP_SIZE-5) {
 		uint32_t copysize = MIN(size-i, MAX_RSP_SIZE-5);
@@ -445,17 +445,20 @@ void fastboot_send_string(void* _data, size_t size) {
 	}
 }
 
-void fastboot_send_string_human(void* _data, size_t size) {
+void fastboot_send_string_human(const void* _data, size_t size) {
 	uint32_t i;
 	char buf[MAX_RSP_SIZE];
 	size_t pos = 0;
-	char* data = _data;
+	const char* data = _data;
+
+	if(size==0)
+		size=strlen(data);
 
 	for(i=0; i<size; i++) {
 		char c = data[i];
 		buf[pos++] = c;
 
-		if(pos==sizeof(buf)-1-4 || c=='\n' || c=='\r') {
+		if(pos==sizeof(buf)-1-4 || i==size-1 || c=='\n' || c=='\r') {
 			buf[pos] = 0;
 			fastboot_info(buf);
 			pos = 0;
