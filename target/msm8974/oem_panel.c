@@ -78,7 +78,7 @@ static struct panel_list supp_panels[] = {
 	{"jdi_1080p_video", JDI_1080P_VIDEO_PANEL},
 	{"toshiba_720p_video", TOSHIBA_720P_VIDEO_PANEL},
 	{"sharp_qhd_video", SHARP_QHD_VIDEO_PANEL},
-	{"sharp_fhd_video", SHARP_FHD_VIDEO_PANEL},
+	{"mdss_dsi_sharp_fhd_cmd_95", SHARP_FHD_VIDEO_PANEL},
 	{"generic_720p_cmd", GENERIC_720P_CMD_PANEL},
 	{"jdi_qhd_dualdsi_video", JDI_QHD_DUALDSI_VIDEO_PANEL},
 	{"jdi_qhd_dualdsi_cmd", JDI_QHD_DUALDSI_CMD_PANEL},
@@ -363,8 +363,10 @@ int oem_panel_select(const char *panel_name, struct panel_struct *panelstruct,
 			break;
 		}
 		auto_pan_loop++;
+
 		if (is_sharp_fhd_panel())
 				panel_id = SHARP_FHD_VIDEO_PANEL;
+
 		break;
 	case HW_PLATFORM_DRAGON:
 		panel_id = SHARP_QHD_VIDEO_PANEL;
