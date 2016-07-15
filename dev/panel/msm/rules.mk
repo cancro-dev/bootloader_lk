@@ -24,8 +24,7 @@ endif
 ifeq ($(PLATFORM),msm8974)
 OBJS += \
 	$(LOCAL_DIR)/mipi_toshiba_video_720p.o \
-	$(LOCAL_DIR)/mipi_sharp_video_qhd.o \
-	$(LOCAL_DIR)/mipi_sharp_video_fhd.o
+	$(LOCAL_DIR)/mipi_sharp_video_qhd.o
 endif
 
 ifeq ($(PLATFORM),msm8226)

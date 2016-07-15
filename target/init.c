@@ -233,6 +233,11 @@ __WEAK uint32_t target_ddr_cfg_val(void)
 	return DDR_CONFIG_VAL;
 }
 
+__WEAK struct fbimage* fetch_image_from_partition(void)
+{
+    return NULL;
+}
+
 /* Return Build variant */
 __WEAK bool target_build_variant_user(void)
 {
