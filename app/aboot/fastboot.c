@@ -269,7 +269,7 @@ static int usb30_usb_write(void *buf, unsigned len)
 	if (fastboot_state == STATE_ERROR)
 		goto oops;
 
-	dprintf(SPEW, "usb_write(): len = %d str = %s\n", len, (char *) buf);
+	//dprintf(SPEW, "usb_write(): len = %d str = %s\n", len, (char *) buf);
 
 	/* flush buffer to main memory before giving to udc */
 	arch_clean_invalidate_cache_range((addr_t) buf, len);
@@ -285,8 +285,7 @@ static int usb30_usb_write(void *buf, unsigned len)
 	}
 	event_wait(&txn_done);
 
-	dprintf(SPEW, "usb_write(): DONE: len = %d req->length = %d str = %s\n",
-			len, req.length, (char *) buf);
+	//dprintf(SPEW, "usb_write(): DONE: len = %d req->length = %d str = %s\n", len, req.length, (char *) buf);
 
 	if (txn_status < 0) {
 		dprintf(CRITICAL, "usb_write() transaction failed. txn_status = %d\n",

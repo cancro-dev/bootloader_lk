@@ -136,7 +136,7 @@ static int mdss_dsi_cmd_dma_trigger_for_panel(char dual_dsi,
 	}
 
 	writel((readl(base + INT_CTRL) | 0x01000001), base + INT_CTRL);
-	dprintf(SPEW, "Panel CMD: command mode dma tested successfully\n");
+	//dprintf(SPEW, "Panel CMD: command mode dma tested successfully\n");
 #endif
 	return status;
 }
@@ -803,7 +803,7 @@ static int dsi_cmd_dma_trigger_for_panel()
 	}
 
 	writel((readl(DSI_INT_CTRL) | 0x01000001), DSI_INT_CTRL);
-	dprintf(SPEW, "Panel CMD: command mode dma tested successfully\n");
+	//dprintf(SPEW, "Panel CMD: command mode dma tested successfully\n");
 	return status;
 }
 
