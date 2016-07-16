@@ -213,7 +213,7 @@ static int msm8974_pwm_backlight_ctrl(int gpio_num, int lpg_chan, int enable)
 
 int target_backlight_ctrl(struct backlight *bl, uint8_t enable)
 {
-/*
+
 	uint32_t ret = NO_ERROR;
 
 	if (!bl) {
@@ -237,8 +237,6 @@ int target_backlight_ctrl(struct backlight *bl, uint8_t enable)
 	}
 
 	return ret;
-*/
-	return 0;
 }
 
 int target_panel_clock(uint8_t enable, struct msm_panel_info *pinfo)
