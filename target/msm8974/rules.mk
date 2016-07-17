@@ -50,3 +50,8 @@ ifdef WITH_KERNEL_UEFIAPI
 OBJS += \
     $(LOCAL_DIR)/uefiapi.o
 endif
+
+ifeq ($(ENABLE_FBCON_DISPLAY_MSG),1)
+DEFINES += FBCON_DISPLAY_MSG=1
+endif
+
