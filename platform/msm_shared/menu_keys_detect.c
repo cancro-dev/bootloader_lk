@@ -50,10 +50,10 @@
 
 static time_t before_time;
 
-extern int target_volume_up();
-extern uint32_t target_volume_down();
+extern uint32_t target_volume_up(void);
+extern uint32_t target_volume_down(void);
 extern void reboot_device(unsigned reboot_reason);
-extern void shutdown_device();
+extern void shutdown_device(void);
 
 typedef uint32_t (*keys_detect_func)(void);
 typedef void (*keys_action_func)(struct select_msg_info* msg_info);
