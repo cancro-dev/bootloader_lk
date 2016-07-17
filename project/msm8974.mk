@@ -44,3 +44,4 @@ endif
 ifeq ($(ENABLE_USB30_SUPPORT),1)
 DEFINES += USB30_SUPPORT=1
 endif
+

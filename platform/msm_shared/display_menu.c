@@ -84,28 +84,28 @@ struct boot_verify_info boot_verify_info[] = {
 #endif
 
 static char *verify_option_menu[] = {
-		[POWEROFF] = "Power off\n",
-		[RESTART] = "Restart\n",
-		[RECOVER] = "Recovery\n",
-		[FASTBOOT] = "Fastboot\n",
-		[BACK] = "Back to previous page\n"};
+		[POWEROFF] = (char *)"Power off\n",
+		[RESTART] = (char *)"Restart\n",
+		[RECOVER] = (char *)"Recovery\n",
+		[FASTBOOT] = (char *)"Fastboot\n",
+		[BACK] = (char *)"Back to previous page\n"};
 
 static char *fastboot_option_menu[] = {
-		[0] = "START\n",
-		[1] = "Restart bootloader\n",
-		[2] = "Recovery mode\n",
-		[3] = "Power off\n"};
+		[0] = (char *)"START\n",
+		[1] = (char *)"Restart bootloader\n",
+		[2] = (char *)"Recovery mode\n",
+		[3] = (char *)"Power off\n"};
 
 static int big_factor = 2;
 static int common_factor = 1;
 
-static void wait_for_exit()
+static void wait_for_exit(void)
 {
 	struct select_msg_info *select_msg;
 	select_msg = &msg_info;
 
 	mutex_acquire(&select_msg->msg_lock);
-	while(!select_msg->info.rel_exit == true) {
+	while((!select_msg->info.rel_exit) == true) {
 		mutex_release(&select_msg->msg_lock);
 		thread_sleep(10);
 		mutex_acquire(&select_msg->msg_lock);
@@ -137,7 +137,7 @@ void exit_menu_keys_detection()
 	wait_for_exit();
 }
 
-static void set_message_factor()
+static void set_message_factor(void)
 {
 	uint32_t tmp_factor = 0;
 	uint32_t max_x_count = 40;
@@ -201,7 +201,7 @@ void display_unlock_menu_renew(struct select_msg_info *unlock_msg_info, int type
 	fbcon_clear();
 	memset(&unlock_msg_info->info, 0, sizeof(struct menu_info));
 
-	display_fbcon_menu_message("Unlock bootloader?\n",
+	display_fbcon_menu_message((char *)"Unlock bootloader?\n",
 		FBCON_UNLOCK_TITLE_MSG, big_factor);
 	fbcon_draw_line(FBCON_COMMON_MSG);
 
@@ -209,18 +209,18 @@ void display_unlock_menu_renew(struct select_msg_info *unlock_msg_info, int type
 		FBCON_COMMON_MSG, common_factor);
 	fbcon_draw_line(FBCON_COMMON_MSG);
 	unlock_msg_info->info.option_start[0] = fbcon_get_current_line();
-	display_fbcon_menu_message("Yes\n",
+	display_fbcon_menu_message((char *)"Yes\n",
 		FBCON_COMMON_MSG, big_factor);
 	unlock_msg_info->info.option_bg[0] = fbcon_get_current_bg();
-	display_fbcon_menu_message("Unlock bootloader(may void warranty)\n",
+	display_fbcon_menu_message((char *)"Unlock bootloader(may void warranty)\n",
 		FBCON_COMMON_MSG, common_factor);
 	unlock_msg_info->info.option_end[0] = fbcon_get_current_line();
 	fbcon_draw_line(FBCON_COMMON_MSG);
 	unlock_msg_info->info.option_start[1] = fbcon_get_current_line();
-	display_fbcon_menu_message("No\n",
+	display_fbcon_menu_message((char *)"No\n",
 		FBCON_COMMON_MSG, big_factor);
 	unlock_msg_info->info.option_bg[1] = fbcon_get_current_bg();
-	display_fbcon_menu_message("Do not unlock bootloader and restart phone\n",
+	display_fbcon_menu_message((char *)"Do not unlock bootloader and restart phone\n",
 		FBCON_COMMON_MSG, common_factor);
 	unlock_msg_info->info.option_end[1] = fbcon_get_current_line();
 	fbcon_draw_line(FBCON_COMMON_MSG);
@@ -315,9 +315,9 @@ void display_bootverify_option_menu_renew(struct select_msg_info *msg_info)
 	memset(&msg_info->info, 0, sizeof(struct menu_info));
 
 	len = ARRAY_SIZE(verify_option_menu);
-	display_fbcon_menu_message("Options menu:\n\n",
+	display_fbcon_menu_message((char *)"Options menu:\n\n",
 		FBCON_COMMON_MSG, big_factor);
-	display_fbcon_menu_message("Press volume key to select, and "\
+	display_fbcon_menu_message((char *)"Press volume key to select, and "\
 		"press power key to select\n\n", FBCON_COMMON_MSG, common_factor);
 
 	for (i = 0; i < len; i++) {
@@ -370,10 +370,10 @@ void display_fastboot_menu_renew(struct select_msg_info *fastboot_msg_info)
 	display_fbcon_menu_message(fastboot_option_menu[option_index],
 		msg_type, big_factor);
 	fbcon_draw_line(msg_type);
-	display_fbcon_menu_message("\n\nPress volume key to select, and "\
+	display_fbcon_menu_message((char *)"\n\nPress volume key to select, and "\
 		"press power key to select\n\n", FBCON_COMMON_MSG, common_factor);
 
-	display_fbcon_menu_message("FASTBOOT MODE\n", FBCON_RED_MSG, common_factor);
+	display_fbcon_menu_message((char *)"FASTBOOT MODE\n", FBCON_RED_MSG, common_factor);
 
 	get_product_name((unsigned char *) msg_buf);
 	snprintf(msg, sizeof(msg), "PRODUCT_NAME - %s\n", msg_buf);
@@ -430,7 +430,6 @@ void msg_lock_init()
 static void display_menu_thread_start(struct select_msg_info *msg_info)
 {
 	thread_t *thr;
-
 	if (!is_thread_start) {
 		thr = thread_create("selectkeydetect", &select_msg_keys_detect,
 			(void*)msg_info, DEFAULT_PRIORITY, DEFAULT_STACK_SIZE);

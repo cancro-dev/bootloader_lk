@@ -41,3 +41,9 @@ OBJS += \
     $(LOCAL_DIR)/meminfo.o \
     $(LOCAL_DIR)/target_display.o \
     $(LOCAL_DIR)/oem_panel.o
+
+ifeq ($(ENABLE_FBCON_DISPLAY_MSG),1)
+DEFINES += FBCON_DISPLAY_MSG=1
+endif
+
+

@@ -170,7 +170,6 @@ static int msm8974_wled_backlight_ctrl(uint8_t enable)
 			if ((hardware_id == HW_PLATFORM_MTP)
 			    || (hardware_id == HW_PLATFORM_LIQUID))
 				slave_id = 3;
-
 		pm8x41_wled_config_slave_id(slave_id);
 		pm8x41_wled_config(&wled_ctrl);
 		pm8x41_wled_sink_control(enable);
