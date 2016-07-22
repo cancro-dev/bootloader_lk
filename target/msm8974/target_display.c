@@ -50,7 +50,7 @@
 static struct msm_fb_panel_data panel;
 static uint8_t edp_enable;
 extern int msm_display_init(struct msm_fb_panel_data *pdata);
-extern void edp_panel_init(struct msm_panel_info *pinfo);
+
 #define HFPLL_LDO_ID 12
 
 /*---------------------------------------------------------------------------*/
@@ -352,7 +352,7 @@ static uint32_t msm8974_mdss_edp_panel_clock(uint8_t enable , struct msm_panel_i
 	return 0;
 }
 
-static int msm8974_edp_panel_power(uint8_t enable,  struct msm_panel_info *pinfo)
+static int msm8974_edp_panel_power(uint8_t enable, struct msm_panel_info *pinfo)
 {
 	struct pm8x41_ldo ldo12 = LDO(PM8x41_LDO12, PLDO_TYPE);
 
