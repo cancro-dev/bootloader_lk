@@ -124,8 +124,10 @@ static int mdss_dsi_cmd_dma_trigger_for_panel(char dual_dsi,
 	}
 
 	ReadValue = readl(base + INT_CTRL) & 0x00000001;
+	dprintf(CRITICAL,"function: %s , Lines: %d , ReadValue = 0x%x \n",__func__,__LINE__,ReadValue);
 	while (ReadValue != 0x00000001) {
 		ReadValue = readl(base + INT_CTRL) & 0x00000001;
+		dprintf(CRITICAL,"function: %s , Lines: %d , ReadValue = 0x%x \n",__func__,__LINE__,ReadValue);
 		count++;
 		if (count > 0xffff) {
 			status = FAIL;

@@ -215,6 +215,10 @@ void fbcon_flush(void)
 		config->update_start();
 	if (config->update_done)
 		while (!config->update_done());
+
+	arch_clean_invalidate_cache_range((addr_t) config->base, config->width * config->height * ((config->bpp) / 8));
+
+
 }
 
 /* TODO: Take stride into account */
@@ -280,7 +284,7 @@ void fbcon_clear(void)
 
 	fbcon_set_colors(FBCON_COMMON_MSG);
 	for (i = 0; i < count; i++) {
-		bg_color = BGCOLOR;
+		bg_color = FGCOLOR;//BGCOLOR;
 		for (j = 0; j < (config->bpp / 8); j++) {
 			*pixels = (unsigned char) bg_color;
 			bg_color = bg_color >> 8;
@@ -391,9 +395,17 @@ void fbcon_setup(struct fbcon_config *_config)
 	max_pos.x = config->width / (FONT_WIDTH+1);
 	max_pos.y = (config->height - 1) / FONT_HEIGHT;
 
-#if !DISPLAY_SPLASH_SCREEN
+//#if !DISPLAY_SPLASH_SCREEN
 	fbcon_clear();
-#endif
+//#endif
+
+	
+	char* buf = lk_log_getbuf();
+	size_t sz = lk_log_getsize();
+	size_t i;
+	for(i=0; i<sz; i++) {
+       		fbcon_putc(buf[i]);
+   	}
 
 }
 

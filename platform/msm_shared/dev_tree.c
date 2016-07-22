@@ -206,6 +206,13 @@ static int dev_tree_compatible(void *dtb, uint32_t dtb_size, struct dt_entry_nod
 	} else if (len_plat_id % min_plat_id_len) {
 		dprintf(INFO, "qcom,msm-id in device tree is (%d) not a multiple of (%d)\n",
 			len_plat_id, min_plat_id_len);
+
+        if(dtb_ver==DEV_TREE_VERSION_V1 && (len_plat_id%DT_ENTRY_V1_LGE_SIZE) == 0) {
+            dprintf(INFO, "LGE DTB V1 detected\n");
+
+            min_plat_id_len = DT_ENTRY_V1_LGE_SIZE;
+        }
+
 		return false;
 	}
 
@@ -260,8 +267,10 @@ static int dev_tree_compatible(void *dtb, uint32_t dtb_size, struct dt_entry_nod
 					board_hardware_id(),
 					board_soc_version());
 
-				plat_prop += DT_ENTRY_V1_SIZE;
-				len_plat_id -= DT_ENTRY_V1_SIZE;
+				//plat_prop += DT_ENTRY_V1_SIZE;
+				//len_plat_id -= DT_ENTRY_V1_SIZE;
+				plat_prop += min_plat_id_len;
+				len_plat_id -= min_plat_id_len;
 				continue;
 			}
 		}

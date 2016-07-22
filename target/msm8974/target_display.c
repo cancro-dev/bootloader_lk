@@ -213,6 +213,7 @@ static int msm8974_pwm_backlight_ctrl(int gpio_num, int lpg_chan, int enable)
 
 int target_backlight_ctrl(struct backlight *bl, uint8_t enable)
 {
+#if 0
 	uint32_t ret = NO_ERROR;
 
 	if (!bl) {
@@ -236,6 +237,8 @@ int target_backlight_ctrl(struct backlight *bl, uint8_t enable)
 	}
 
 	return ret;
+#endif
+	return 0;
 }
 
 int target_panel_clock(uint8_t enable, struct msm_panel_info *pinfo)
@@ -268,6 +271,7 @@ int target_panel_clock(uint8_t enable, struct msm_panel_info *pinfo)
 int target_panel_reset(uint8_t enable, struct panel_reset_sequence *resetseq,
 					struct msm_panel_info *pinfo)
 {
+#if 0
 	uint32_t rst_gpio = reset_gpio.pin_id;
 	uint32_t platform_id = board_platform_id();
 	uint32_t hardware_id = board_hardware_id();
@@ -306,10 +310,13 @@ int target_panel_reset(uint8_t enable, struct panel_reset_sequence *resetseq,
 		gpio_set(enable_gpio.pin_id, resetseq->pin_direction);
 	}
 	return NO_ERROR;
+#endif 
+	return 0;
 }
 
 int target_ldo_ctrl(uint8_t enable, struct msm_panel_info *pinfo)
 {
+#if 0
 	uint32_t ldocounter = 0;
 	uint32_t pm8x41_ldo_base = 0x13F00;
 
@@ -333,6 +340,8 @@ int target_ldo_ctrl(uint8_t enable, struct msm_panel_info *pinfo)
 	}
 
 	return NO_ERROR;
+#endif
+	return 0;
 }
 
 static uint32_t msm8974_mdss_edp_panel_clock(uint8_t enable , struct msm_panel_info *pinfo)
@@ -456,6 +465,8 @@ void target_display_init(const char *panel_name)
 			target_force_cont_splash_disable(false);
 			ret = gcdb_display_init(oem.panel, MDP_REV_50,
 				(void *)MIPI_FB_ADDR);
+			if(ret) 
+				reboot_device(0x77665500);
 			if (!ret || ret == ERR_NOT_SUPPORTED) {
 				break;
 			} else {

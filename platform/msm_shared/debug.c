@@ -69,7 +69,7 @@ static void write_dcc(char c)
 #endif
 
 #define LK_LOG_COOKIE    0x474f4c52 /* "RLOG" in ASCII */
-#define LK_LOG_ADDR 0xc0000000
+#define LK_LOG_ADDR (0x40000000 + (1*1024*1024))
 
 struct lk_log {
 	struct lk_log_header {

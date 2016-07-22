@@ -55,6 +55,7 @@
  * The macros below are defined based on these.
  */
 #define DT_ENTRY_V1_SIZE        0xC
+#define DT_ENTRY_V1_LGE_SIZE    (4*4)
 #define PLAT_ID_SIZE            0x8
 #define BOARD_ID_SIZE           0x8
 #define PMIC_ID_SIZE           0x8

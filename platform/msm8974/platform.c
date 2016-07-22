@@ -45,8 +45,12 @@
                            MMU_MEMORY_AP_READ_WRITE)
 
 /* Peripherals - non-shared device */
+#if 0
 #define IOMAP_MEMORY      (MMU_MEMORY_TYPE_DEVICE_SHARED | \
                            MMU_MEMORY_AP_READ_WRITE | MMU_MEMORY_XN)
+#endif
+#define IOMAP_MEMORY      (MMU_MEMORY_TYPE_DEVICE_NON_SHARED | \
+                         MMU_MEMORY_AP_READ_WRITE | MMU_MEMORY_XN)
 
 /* IMEM memory - cacheable, write through */
 #define IMEM_MEMORY       (MMU_MEMORY_TYPE_NORMAL_WRITE_THROUGH | \

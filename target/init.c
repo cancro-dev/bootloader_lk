@@ -242,3 +242,9 @@ __WEAK bool target_build_variant_user(void)
 	return false;
 #endif
 }
+
+__WEAK struct fbimage* fetch_image_from_partition(void)
+{
+    return NULL;
+}
+
