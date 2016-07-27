@@ -214,10 +214,10 @@ int mdss_dsi_cmds_tx(struct mipi_panel_info *mipi,
 		memcpy((uint8_t *)off, (cm->payload), cm->size);
 		arch_clean_invalidate_cache_range((addr_t)(off), size);
 		writel(off, ctl_base + DMA_CMD_OFFSET);
-		writel(size, ctl_base + DMA_CMD_LENGTH);
+		writel(cm->size, ctl_base + DMA_CMD_LENGTH);
 		if (dual_dsi) {
 			writel(off, sctl_base + DMA_CMD_OFFSET);
-			writel(size, sctl_base + DMA_CMD_LENGTH);
+			writel(cm->size, sctl_base + DMA_CMD_LENGTH);
 		}
 		dsb();
 		ret += mdss_dsi_cmd_dma_trigger_for_panel(dual_dsi, ctl_base,
